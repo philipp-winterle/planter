@@ -1,0 +1,44 @@
+@import "imports.scss";
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  font-size: 1.6rem;
+}
+
+header {
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .logo {
+    flex: 0 0 auto;
+    height: 50px;
+    width: 50px;
+    margin-right: 1rem;
+  }
+
+  .title {
+    font-family: "Passion One", cursive;
+    font-size: 4.5rem;
+    font-weight: bold;
+    font-variant: small-caps;
+    line-height: 1;
+    color: #66ad66;
+    display: flex;
+  }
+}
+
+@media screen and (min-width: 600px) {
+  header {
+    justify-content: flex-start;
+    align-items: center;
+
+    .title {
+      font-size: 6rem;
+    }
+  }
+}

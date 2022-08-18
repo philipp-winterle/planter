@@ -1,0 +1,161 @@
+version: '3.8'
+
+services:
+  database:
+    container_name: database
+    image: postgis/postgis:13-master
+    volumes:
+      - planter_data:/var/lib/postgresql/data
+    networks:
+      - directus
+    environment:
+      POSTGRES_USER: 'directus'
+      POSTGRES_PASSWORD: 'directus'
+      POSTGRES_DB: 'directus'
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U directus"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    logging:
+      driver: "local"
+      options:
+        max-file: "2"
+        max-size: 5m
+
+  cache:
+    container_name: cache
+    image: redis:6
+    networks:
+      - directus
+    logging:
+      driver: "local"
+      options:
+        max-file: "2"
+        max-size: 1m
+
+  directus:
+    container_name: directus
+    image: directus/directus:9
+    ports:
+      - ${DIRECTUS_PORT}:${DIRECTUS_PORT}
+    volumes:
+      # By default, uploads are stored in /directus/uploads
+      # Always make sure your volumes matches the storage root when using
+      # local driver
+      - planter_uploads:/directus/uploads
+      # Make sure to also mount the volume when using SQLite
+      # - ./database:/directus/database
+      # If you want to load extensions from the host
+      - ./admin/extensions:/directus/extensions
+    networks:
+      - directus
+    depends_on:
+      cache:
+        condition: service_started
+      database: 
+        condition: service_healthy
+    env_file: ./.env
+    environment:
+      NODE_ENV: ${DIRECTUS_NODE_ENV}
+      PORT: ${DIRECTUS_PORT}
+      KEY: ${DIRECTUS_KEY}
+      SECRET: ${DIRECTUS_SECRET}
+      DB_CLIENT: ${DIRECTUS_DB_CLIENT}
+      DB_HOST: ${DIRECTUS_DB_HOST}
+      DB_PORT: 5432
+      DB_DATABASE: ${DIRECTUS_DB_DATABASE}
+      DB_USER: ${DIRECTUS_DB_USER}
+      DB_PASSWORD: ${DIRECTUS_DB_PASSWORD}
+      CACHE_ENABLED: ${DIRECTUS_CACHE_ENABLED}
+      CACHE_STORE: ${DIRECTUS_CACHE_STORE}
+      CACHE_REDIS: ${DIRECTUS_CACHE_REDIS}
+      CACHE_TTL: ${DIRECTUS_CACHE_TTL}
+      CACHE_AUTO_PURGE: ${DIRECTUS_CACHE_AUTO_PURGE}
+      ADMIN_EMAIL: ${DIRECTUS_ADMIN_EMAIL}
+      ADMIN_PASSWORD: ${DIRECTUS_ADMIN_PASSWORD}
+      CORS_ORIGIN: ${DIRECTUS_CORS_ORIGIN}
+      CORS_ENABLED: ${DIRECTUS_CORS_ENABLED}
+      DIRECTUS_USE_SSL: ${DIRECTUS_USE_SSL}
+      LOG_LEVEL: ${DIRECTUS_LOG_LEVEL}
+      # Make sure to set this in production
+      # (see https://docs.directus.io/configuration/config-options/#general)
+      PUBLIC_URL: '/'
+    healthcheck:
+      test: [ "CMD-SHELL", "wget http://directus:$DIRECTUS_PORT/admin -q -O - > /dev/null 2>&1" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    logging:
+      driver: "local"
+      options:
+        max-file: "2"
+        max-size: 5m
+
+  websocket:
+    container_name: websocket
+    build:
+      context: ./websocket
+      dockerfile: ./Dockerfile
+    env_file: ./.env
+    environment:
+      - NODE_ENV=production
+      - WEBSOCKET_PORT=${WEBSOCKET_PORT}
+      - WEBHOOK_PORT=${WEBHOOK_PORT}
+    ports: 
+      - ${WEBSOCKET_PORT}:${WEBSOCKET_PORT}
+      - ${WEBHOOK_PORT}:${WEBHOOK_PORT}
+    volumes:
+      - ./websocket/files/webhook_server.js:/scripts/webhook_server.js
+      - ./websocket/files/websocket_server.js:/scripts/websocket_server.js
+    networks:
+      - directus
+    logging:
+      driver: "local"
+      options:
+        max-file: "2"
+        max-size: 5m
+
+  planter:
+    container_name: planter
+    build:
+      context: ./app
+      dockerfile: ./Dockerfile
+    env_file: ./.env
+    environment:
+      - NODE_ENV=$NODE_ENV
+      - INTERNAL_STATUS_PORT=${GATSBY_INTERNAL_STATUS_PORT}
+      - DIRECTUS_HOST=$DIRECTUS_HOST
+      - GATSBY_DIRECTUS_PORT=${DIRECTUS_PORT}
+      - GATSBY_DIRECTUS_ACCESS_TOKEN=${DIRECTUS_ACCESS_TOKEN}
+      - GATSBY_WEBSOCKET_PORT=${WEBSOCKET_PORT}
+      - GATSBY_WEBHOOK_PORT=${WEBHOOK_PORT}
+      - GATSBY_PLANTER_SHOW_USERS=$GATSBY_PLANTER_SHOW_USERS
+    ports: 
+      - ${GATSBY_PORT}:${GATSBY_PORT}
+      - ${GATSBY_INTERNAL_STATUS_PORT}:${GATSBY_INTERNAL_STATUS_PORT}
+    volumes:
+      - ./app/files/src:/planter/src
+      - ./app/files/gatsby-config.ts:/planter/gatsby-config.ts
+      - ./app/files/gatsby-node.ts:/planter/gatsby-node.ts
+      - ./app/files/package.json:/planter/package.json
+      - ./app/files/tsconfig.json:/planter/tsconfig.json
+    networks:
+      - directus
+    depends_on:
+      directus:
+        condition: service_healthy
+    logging:
+      driver: "local"
+      options:
+        max-file: "2"
+        max-size: 5m
+
+networks:
+  directus:
+
+volumes:
+  planter_data:
+    external: true
+  planter_uploads:
+    external: true
