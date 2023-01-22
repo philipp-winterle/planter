@@ -38,8 +38,6 @@ const config: GatsbyConfig = {
     //     url: process.env.DIRECTUS_HOST,
     //     auth: {
     //       token: process.env.DIRECTUS_ACCESS_TOKEN,
-    //       // email: "tcms-dev@check24.de",
-    //       // password: "check24.de",
     //     },
     //     dev: {
     //       refresh: 0,
