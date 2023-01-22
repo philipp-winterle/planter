@@ -1,0 +1,19 @@
+{
+  "name": "planter",
+  "version": "1.0.0",
+  "description": "A tool to maintain water and fertilization to your plants",
+  "main": "index.js",
+  "scripts": {
+    "backup": "/bin/sh ./admin/scripts/backup.sh",
+    "restore": "/bin/sh ./admin/scripts/restore.sh",
+    "setup": "/bin/sh ./admin/scripts/setup.sh",
+    "start": "docker compose up -d",
+    "stop": "docker compose down"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hummal/planter"
+  },
+  "author": "Philipp Winterle<philipp.winterle@gmail.com>",
+  "license": "ISC"
+}

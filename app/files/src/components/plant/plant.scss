@@ -1,0 +1,192 @@
+@import "../../styles/_imports.scss";
+
+$border-radius-size: 14em;
+$font-size-rem-16px: 16em;
+
+.plants {
+  font-size: 0.135rem;
+
+  .row {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .plant-col {
+    flex: 0 1 0; // Needed for auto size
+
+    .plant {
+      width: 250em;
+      max-width: 250em;
+
+      user-select: none;
+
+      position: relative;
+      text-align: center;
+      box-shadow: 0px 0px 50em -25em $gray-800;
+
+      .plant-img {
+        object-fit: cover;
+        object-position: center;
+
+        height: 150em;
+      }
+
+      .plant-card-subtitle {
+        text-transform: uppercase;
+        font-size: $font-size-rem-16px;
+        font-weight: 700;
+        margin: 0.5em 0 0 0;
+      }
+
+      .plant-card-title {
+        font-size: 24em;
+        color: $green-800;
+        font-weight: 900;
+        margin: 0 0 0.5em 0;
+        padding: 0 0.2em;
+        line-height: 1;
+        overflow: hidden;
+        white-space: nowrap; /* Don't forget this one */
+        text-overflow: ellipsis;
+      }
+
+      .plant-data {
+        .plant-data-item {
+          display: flex;
+          border: 0.5em solid $gray-300;
+          border-radius: 5em;
+          padding: 0;
+          margin: 0;
+          flex: 1 1;
+          height: 40em;
+
+          .plant-data-content {
+            flex: 1 1 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 400;
+
+            .plant-data-content-col {
+              flex: 1 1 auto;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+
+              &:not(:last-child) {
+                border-right: 0.5em solid $gray-400;
+              }
+            }
+
+            .plant-data-icon {
+              flex: 0 0 auto;
+              width: 40em;
+
+              img {
+                width: 30em;
+
+                object-fit: contain;
+              }
+            }
+
+            .plant-data-fertilize-interval,
+            .plant-data-water-interval {
+              flex: 0 0 auto;
+              justify-content: flex-start;
+              width: 70em;
+              max-width: 70em;
+
+              img {
+                width: 20em;
+                height: 20em;
+                margin: 0 5em;
+              }
+
+              span {
+                padding: 0 0.1em;
+                font-size: 16em;
+              }
+            }
+          }
+
+          &.fertilize {
+          }
+
+          &.water {
+            display: flex;
+            justify-content: center;
+
+            .plant-data-water-amount-icon {
+              height: 20em;
+              width: 20em;
+              background-image: url(../../images/waterglas.png);
+              background-size: 20em 20em;
+            }
+          }
+        }
+      }
+
+      .plant-data-buttons {
+        height: 70em;
+        display: flex;
+
+        .plant-data-button {
+          flex: 0 0 50%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+
+          border: 0.5em solid $gray-400;
+          background-color: $green-300;
+
+          img {
+            user-select: none;
+            pointer-events: none;
+            height: 40em;
+            width: auto;
+          }
+        }
+      }
+
+      .card-footer {
+        position: relative;
+      }
+    }
+  }
+
+  @media screen and (min-width: 600px) {
+    font-size: 0.1rem;
+
+    .row {
+      flex: 1;
+      justify-content: flex-start;
+    }
+  }
+
+  @media screen and (min-width: 768px) and (-webkit-device-pixel-ratio: 2) {
+    font-size: 0.08rem; // 3 col
+    // font-size: 0.06rem; // 4 col
+  }
+
+  // Tablet IPAD 9th, // Ipad Mini
+  @media screen and (min-width: 1080px) and (-webkit-device-pixel-ratio: 2),
+    screen and (min-width: 810px) and (min-resolution: 2dppx),
+    screen and (min-width: 768px) and (min-resolution: 3dppx) {
+    font-size: 0.09rem;
+  }
+
+  // FULL HD 1080p
+  @media screen and (min-width: 1920px) {
+    font-size: 0.06rem;
+  }
+
+  // 1440p / WQHD
+  @media screen and (min-width: 2560px) {
+    font-size: 0.083rem;
+  }
+
+  // UHD / 2160p (4k)
+  @media screen and (min-width: 3840px) {
+    font-size: 0.13rem;
+  }
+}

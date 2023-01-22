@@ -1,0 +1,307 @@
+@import "../../styles/imports.scss";
+
+.user-stats {
+  flex: 0;
+  font-size: 0.1rem;
+
+  .users {
+    .user-card {
+      width: 175em;
+      height: 170em;
+      background-color: #fff;
+      background: linear-gradient(#f8f8f8, #fff);
+      box-shadow: 0 8em 16em -8em rgba(0, 0, 0, 0.4);
+      border-radius: 6em;
+      position: relative;
+      display: flex;
+      overflow: hidden;
+      padding: 0 5em;
+      display: none;
+
+      .wrapper {
+        position: relative;
+        background: linear-gradient(#de685e, #ee786e);
+        transition: width 0.4s;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+
+        .user-info {
+          width: 100%;
+          min-width: 150em;
+          height: 100%;
+          position: relative;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          overflow: visible; // Cut off avatar
+          padding: 5em;
+
+          // This is the border next to the avatar right
+          &::after {
+            content: "";
+            display: none;
+            position: absolute;
+            top: 10%;
+            right: 0;
+            height: 80%;
+            border-left: 2em solid rgba(0, 0, 0, 0.05);
+          }
+
+          .username {
+            font-size: 28em;
+            font-weight: bold;
+            color: white;
+            line-height: 1;
+            position: absolute;
+            top: 0.2em;
+            z-index: 1;
+            overflow: hidden;
+            text-shadow: 3em 3em 20em $gray-800, -2em 1em 30em #df6b62;
+          }
+
+          .avatar {
+            display: flex;
+            justify-content: center;
+
+            .avatar-image {
+              object-fit: cover;
+              transform: scale(1.5);
+              width: 100em;
+              height: fit-content;
+              padding-top: 13em;
+            }
+          }
+        }
+
+        .more-info {
+          position: absolute;
+          bottom: 0;
+          flex: 1 1 auto;
+          width: 100%;
+
+          .stats {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+            color: #fff;
+            height: 100%;
+
+            .row {
+              flex: 1 1 auto;
+            }
+
+            .stats-item {
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+
+              .label {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+
+                svg {
+                  height: 15em;
+                  color: white;
+                  fill: white;
+                }
+
+                span {
+                  font-size: 0.7em;
+                  font-weight: bold;
+                  text-transform: uppercase;
+                }
+              }
+
+              .value {
+                flex: 1 1 auto;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1em;
+              }
+            }
+
+            .points {
+              flex: 1;
+              padding: 15em 10em 10em 10em;
+
+              .stats-item {
+                flex-direction: row;
+
+                .label {
+                  display: none;
+                  width: 80em;
+                  max-width: 80em;
+                  svg {
+                    height: 40em;
+                  }
+
+                  span {
+                    font-size: 16em;
+                  }
+                }
+
+                .value {
+                  font-size: 45em;
+                  font-weight: bolder;
+                  line-height: 1;
+
+                  background-color: #343a40b5;
+                  border-radius: 0.1em;
+                }
+              }
+            }
+
+            .details {
+              display: none;
+              padding: 5em 5em 10em 5em;
+
+              .stats-item {
+                flex: 1 1 auto;
+                font-size: 14em;
+                padding: 0 1em;
+
+                .label {
+                  svg {
+                    width: 2em;
+                    height: auto;
+                    padding: 0.3em;
+                  }
+                }
+
+                .value {
+                  font-size: 1.3em;
+                  line-height: 1;
+                }
+              }
+            }
+          }
+        }
+      }
+
+      &:hover .additional {
+        border-radius: 0 5em 5em 0;
+      }
+
+      &.green .additional {
+        background: linear-gradient(#92bca6, #a2ccb6);
+
+        .more-info h1 {
+          color: #224c36;
+        }
+
+        .coords {
+          color: #325c46;
+        }
+
+        .stats {
+          color: #325c46;
+        }
+      }
+    }
+  }
+
+  // Square Looks
+  @media screen and (min-width: 1280px) {
+    .users {
+      justify-content: space-around;
+
+      /* prettier-ignore */
+      .user-card:nth-child(-n+3) {
+        width: 350em;
+        height: 170em;
+
+        .wrapper {
+          flex-direction: row;
+
+          .user-info {
+            width: 150em;
+            min-width: 150em;
+            max-width: 150em;
+            overflow: hidden;
+            justify-content: flex-start;
+
+            &::after {
+              display: block;
+            }
+
+            .username {
+              padding-right: initial;
+              text-shadow: none;
+            }
+
+            .avatar {
+              .avatar-image {
+                width: 160em;
+                transform: scale(1);
+              }
+            }
+          }
+
+          .more-info {
+            position: relative;
+            width: auto;
+            .stats {
+              .points {
+                .stats-item {
+                  .label {
+                    display: flex;
+                  }
+
+                  .value {
+                    font-size: 40em;
+                    font-weight: bold;
+                    background-color: transparent;
+                  }
+                }
+              }
+
+              .details {
+                display: flex;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // FULL HD 1080p
+  @media screen and (min-width: 1920px) {
+    font-size: 0.065rem;
+
+    .users {
+      /* prettier-ignore */
+      .user-card:nth-child(-n+13) {
+        display: flex;
+      }
+    }
+  }
+
+  // 1440p | WQHD
+  @media screen and (min-width: 2560px) {
+    font-size: 0.09rem;
+
+    .users {
+      /* prettier-ignore */
+      .user-card:nth-child(-n+13) {
+        display: flex;
+      }
+    }
+  }
+
+  // UHD / 2160p (4k)
+  @media screen and (min-width: 3840px) {
+    font-size: 0.142rem;
+
+    .users {
+      /* prettier-ignore */
+      .user-card:nth-child(-n+15) {
+        display: flex;
+      }
+    }
+  }
+}
